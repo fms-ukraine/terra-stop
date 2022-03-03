@@ -1,6 +1,6 @@
-resource "digitalocean_droplet" "virtual-1" {
+resource "digitalocean_droplet" "virtual-6" {
   image = "ubuntu-20-04-x64"
-  name = "virtual-1"
+  name = "virtual-6"
   region = "ams3"
   size = "s-1vcpu-1gb"
   ssh_keys = [
@@ -15,7 +15,7 @@ resource "digitalocean_droplet" "virtual-1" {
     timeout = "2m"
   }
   
-  provisioner "remote-exec" {
+    provisioner "remote-exec" {
     inline = [
       "export PATH=$PATH:/usr/bin",
       # install bombardier and start
