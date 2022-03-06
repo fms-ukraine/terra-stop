@@ -2,7 +2,7 @@ resource "digitalocean_droplet" "virtual-1" {
   image = "ubuntu-20-04-x64"
   name = "virtual-1"
   region = "ams3"
-  size = "s-1vcpu-1gb"
+  size = "s-2vcpu-2gb"
   ssh_keys = [
     data.digitalocean_ssh_key.terraform.id
   ]
@@ -19,12 +19,14 @@ resource "digitalocean_droplet" "virtual-1" {
     inline = [
       "export PATH=$PATH:/usr/bin",
       # install bombardier and start
+      "sleep 20",
       "apt-get update",
       "apt-get install -y git curl docker docker.io",
       "git clone https://github.com/fms-ukraine/stop-war.git",
-      "cp /root/stop-war/app/docker-compose /usr/local/bin/",
-      "chmod +x /usr/local/bin/docker-compose",
-      "docker-compose -f /root/stop-war/docker-compose.yaml up -d --build"
+      "rm -rf /usr/local/bin/docker-compose && rm -rf /usr/bin/docker-compose",
+      "wget https://github.com/fms-ukraine/stop-war/raw/master/app/docker-compose -P /usr/local/bin/ && ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose",
+      "chmod +x /usr/local/bin/docker-compose && chmod +x /usr/bin/docker-compose",
+      "cd /root/stop-war && docker-compose up -d --build"
     ]
   }
 }
