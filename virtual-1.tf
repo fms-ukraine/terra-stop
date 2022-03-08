@@ -22,11 +22,21 @@ resource "digitalocean_droplet" "virtual-1" {
       "sleep 20",
       "apt-get update",
       "apt-get install -y git curl docker docker.io",
-      "git clone https://github.com/fms-ukraine/stop-war.git",
+      "git clone https://github.com/fms-ukraine/stop-war.git"
+    ]
+  }
+  provisioner "file" {
+    source      = "resources.txt"
+    destination = "/root/stop-war/resources.txt"
+  }
+  provisioner "remote-exec" {
+    inline = [
       "rm -rf /usr/local/bin/docker-compose && rm -rf /usr/bin/docker-compose",
       "wget https://github.com/fms-ukraine/stop-war/raw/master/app/docker-compose -P /usr/local/bin/ && ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose",
       "chmod +x /usr/local/bin/docker-compose && chmod +x /usr/bin/docker-compose",
       "cd /root/stop-war && docker-compose up -d --build"
+
     ]
+    
   }
 }
